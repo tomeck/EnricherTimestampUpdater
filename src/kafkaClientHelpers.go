@@ -45,3 +45,10 @@ func getKafkaProducerClient(configMap *kafka.ConfigMap) (*kafka.Producer, error)
 
 	return producer, err
 }
+
+func getAdminClient(configMap *kafka.ConfigMap) (*kafka.AdminClient, error) {
+	// Variable p holds the new AdminClient instance.
+	admin, err := kafka.NewAdminClient(configMap)
+
+	return admin, err
+}
