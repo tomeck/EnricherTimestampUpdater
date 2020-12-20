@@ -4,6 +4,18 @@ import (
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
+func getKafkaConsumerClient(configMap *kafka.ConfigMap, sourceTopic string) (*kafka.Consumer, error) {
+
+	consumer, err := kafka.NewConsumer(configMap)
+
+	if err == nil {
+		consumer.SubscribeTopics([]string{sourceTopic}, nil)
+	}
+
+	return consumer, err
+}
+
+/*
 func getKafkaConsumerClient(bootstrapServer string, groupID string, sourceTopic string) (*kafka.Consumer, error) {
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
@@ -22,6 +34,14 @@ func getKafkaConsumerClient(bootstrapServer string, groupID string, sourceTopic 
 func getKafkaProducerClient(bootstrapServer string) (*kafka.Producer, error) {
 
 	producer, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": bootstrapServer})
+
+	return producer, err
+}
+*/
+
+func getKafkaProducerClient(configMap *kafka.ConfigMap) (*kafka.Producer, error) {
+
+	producer, err := kafka.NewProducer(configMap})
 
 	return producer, err
 }

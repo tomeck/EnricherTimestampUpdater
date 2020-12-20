@@ -35,6 +35,7 @@ func processMessage(msg *kafka.Message, producer *kafka.Producer, nextTopic stri
 			Value:          []byte(jsonString),
 		}, nil)
 
+		// TODO find a better way to wait
 		// Wait for message deliveries before shutting down
 		producer.Flush(2 * 1000)
 	}
@@ -54,16 +55,36 @@ func consumptionLoop(consumer *kafka.Consumer, producer *kafka.Producer, destTop
 }
 
 func main() {
-	bootstrapServer := "localhost"
+	//bootstrapServer := "localhost"
+	//groupID := "zed-grp"
+	//sourceTopic := "topic1"
+	//destTopic := "topic2"
+
+	bootstrapServer := "fiser-k-dev-kafka-bootstrap-cp4i.roks-eck-cluster-8a571839bba611238ae425f409ae5396-0000.us-south.containers.appdomain.cloud:443"
 	groupID := "zed-grp"
 	sourceTopic := "topic1"
 	destTopic := "topic2"
+	userName := "ibm-iam-bindinfo-platform-auth-idp-credentials-2"
+	password := "XCHp0UG7wAVa"
+
+	type Dictionary map[string]interface{}
+
+	configMap := &kafka.ConfigMap{
+		"bootstrap.servers": bootstrapServer,
+		"group.id":          groupID,
+		"security.protocol": "SASL_SSL",
+		"sasl.mechanisms":   "SCRAM-SHA-512",
+		"sasl.username":     userName,
+		"sasl.password":     password,
+		"auto.offset.reset": "earliest",
+	}
+	//ssl.ca.location
 
 	// FOR TESTING
 	// Produce some messages
 	//go produce(bootstrapServer, sourceTopic)
 
-	consumer, err := getKafkaConsumerClient(bootstrapServer, groupID, sourceTopic)
+	consumer, err := getKafkaConsumerClient(configMap, sourceTopic)
 	if err != nil {
 		panic(err)
 	}
