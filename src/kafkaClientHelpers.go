@@ -41,7 +41,7 @@ func getKafkaProducerClient(bootstrapServer string) (*kafka.Producer, error) {
 
 func getKafkaProducerClient(configMap *kafka.ConfigMap) (*kafka.Producer, error) {
 
-	producer, err := kafka.NewProducer(configMap})
+	producer, err := kafka.NewProducer(configMap)
 
 	return producer, err
 }

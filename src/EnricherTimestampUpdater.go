@@ -67,29 +67,30 @@ func main() {
 	userName := "ibm-iam-bindinfo-platform-auth-idp-credentials-2"
 	password := "XCHp0UG7wAVa"
 
-	type Dictionary map[string]interface{}
-
 	configMap := &kafka.ConfigMap{
-		"bootstrap.servers": bootstrapServer,
-		"group.id":          groupID,
-		"security.protocol": "SASL_SSL",
-		"sasl.mechanisms":   "SCRAM-SHA-512",
-		"sasl.username":     userName,
-		"sasl.password":     password,
+		"bootstrap.servers":                   bootstrapServer,
+		"group.id":                            groupID,
+		"security.protocol":                   "SASL_SSL",
+		"sasl.mechanism":                      "SCRAM-SHA-512",
+		"sasl.username":                       userName,
+		"sasl.password":                       password,
+		"enable.ssl.certificate.verification": false,
+		//"ssl.ca.location":   "/usr/local/etc/openssl@1.1/cert.pem",
 		"auto.offset.reset": "earliest",
 	}
-	//ssl.ca.location
+
+	//"/usr/local/etc/openssl@1.1/cert.pem"
 
 	// FOR TESTING
 	// Produce some messages
-	//go produce(bootstrapServer, sourceTopic)
+	//go produce(configMap, sourceTopic)
 
 	consumer, err := getKafkaConsumerClient(configMap, sourceTopic)
 	if err != nil {
 		panic(err)
 	}
 
-	producer, err := getKafkaProducerClient(bootstrapServer)
+	producer, err := getKafkaProducerClient(configMap)
 	if err != nil {
 		panic(err)
 	}

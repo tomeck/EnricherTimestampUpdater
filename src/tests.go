@@ -3,8 +3,9 @@ package main
 import "gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 
 // FOR TESTING
-func produce(bootstrapServer string, topic string) {
-	producer, err := getKafkaProducerClient(bootstrapServer)
+func produce(configMap *kafka.ConfigMap, topic string) {
+
+	producer, err := getKafkaProducerClient(configMap)
 	if err != nil {
 		panic(err)
 	}
